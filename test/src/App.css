@@ -1,0 +1,13 @@
+.App {
+    top: 50%;
+    left: 50%;
+    color: white;
+    width: 50vw;
+    height: 50vw;
+    display: flex;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    pointer-events: all;
+    background-color: rgb(48, 69, 95);
+}
