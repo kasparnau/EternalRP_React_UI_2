@@ -1,6 +1,10 @@
 import "./App.css";
 import React from "react";
+
 import doEvent from "./doEvent.js";
+
+import failSound from "./audio/piippuupfail.ogg";
+import successSound from "./audio/piippuupsuccess.ogg";
 
 const IS_PROD = process.env.NODE_ENV === "production";
 
@@ -110,6 +114,7 @@ function App() {
     return clicked;
   }
 
+  // INNER FIND UNUSED TILE
   function _generateCorrectTile(cols, rows, tileList, correctTiles) {
     let col = getRandomInt(cols);
     let row = getRandomInt(rows);
@@ -121,6 +126,7 @@ function App() {
     return [col, row];
   }
 
+  // GENERATE NEW TILESET
   function generateNewCorrectTiles(cols, rows, tiles, correctTiles) {
     let newCorrectTiles = [];
     for (let i = 0; i < tiles; i++) {
@@ -136,7 +142,27 @@ function App() {
     setValue("correctTiles", newCorrectTiles);
   }
 
-  async function startGame(data) {
+  function getTotalCorrectTiles() {
+    let correct = 0;
+    for (let i = 0; i < values.clicked.length; i++) {
+      if (isCorrectTile(values.clicked[i][0], values.clicked[i][1])) {
+        correct += 1;
+      }
+    }
+    return correct;
+  }
+
+  function getTotalWrongTiles() {
+    let wrong = 0;
+    for (let i = 0; i < values.clicked.length; i++) {
+      if (!isCorrectTile(values.clicked[i][0], values.clicked[i][1])) {
+        wrong += 1;
+      }
+    }
+    return wrong;
+  }
+
+  function startGame(data) {
     setRequiredTiles(data.tiles);
 
     setRows(data.rows);
@@ -156,7 +182,9 @@ function App() {
     );
     setMemorizing(true);
 
+    clearTimeout(memorizingTimeout.current);
     memorizingTimeout.current = setTimeout(() => {
+      console.log("WAITED " + data.memorizeTime);
       setMemorizing(false);
     }, data.memorizeTime);
   }
@@ -183,14 +211,15 @@ function App() {
         columns: 5,
         tiles: 10,
 
-        memorizeTime: 2000,
+        memorizeTime: 500,
       });
     }
 
     window.addEventListener("message", (event) => {
-      console.table(event.data);
-
       if (event.data.show !== undefined) {
+        if (!event.data.show) {
+          clearTimeout(memorizingTimeout.current);
+        }
         updateVisible(event.data.show);
       }
       if (event.data.play !== undefined) {
@@ -198,39 +227,20 @@ function App() {
       }
     });
 
-    window.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        if (visible) {
-          endGame(false);
-        }
-      }
-    });
-
-    return () => {
-      // Clean up
-      clearTimeout(memorizingTimeout.current);
-    };
+    // window.addEventListener("keydown", (event) => {
+    //   if (event.key === "Escape") {
+    //     if (visible) {
+    //       endGame(false);
+    //     }
+    //   }
+    // });
   }, []);
 
-  function getTotalCorrectTiles() {
-    let correct = 0;
-    for (let i = 0; i < values.clicked.length; i++) {
-      if (isCorrectTile(values.clicked[i][0], values.clicked[i][1])) {
-        correct += 1;
-      }
-    }
-    return correct;
-  }
+  let failAudio = new Audio(failSound);
+  let successAudio = new Audio(successSound);
 
-  function getTotalWrongTiles() {
-    let wrong = 0;
-    for (let i = 0; i < values.clicked.length; i++) {
-      if (!isCorrectTile(values.clicked[i][0], values.clicked[i][1])) {
-        wrong += 1;
-      }
-    }
-    return wrong;
-  }
+  failAudio.volume = 0.6;
+  successAudio.volume = 0.4;
 
   function handleClick(col, row) {
     let clicked = isClickedTile(col, row);
@@ -240,12 +250,14 @@ function App() {
     setValues((values) => {
       let correct = isCorrectTile(col, row);
       if (!correct) {
-        let totalWrongTiles = getTotalWrongTiles() + 1;
+        failAudio.play();
+        let totalWrongTiles = getTotalWrongTiles() + 1; // ADD ONE BECAUSE THIS IS BEFORE STATE UPDATE
         if (totalWrongTiles === 3) {
           endGame(false);
         }
       } else {
-        let totalCorrectTiles = getTotalCorrectTiles() + 1;
+        successAudio.play();
+        let totalCorrectTiles = getTotalCorrectTiles() + 1; // ADD ONE BECAUSE THIS IS BEFORE STATE UPDATE
         if (totalCorrectTiles === requiredTiles) {
           endGame(true);
         }
