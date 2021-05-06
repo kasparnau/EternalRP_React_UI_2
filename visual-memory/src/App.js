@@ -1,239 +1,285 @@
-import './App.css';
-import React from 'react';
-import doEvent from './doEvent.js'
+import "./App.css";
+import React from "react";
+import doEvent from "./doEvent.js";
 
-const IS_PROD = process.env.NODE_ENV === 'production'
+const IS_PROD = process.env.NODE_ENV === "production";
 
 function Square(props) {
-  let clicked = props.isClickedTile(props.col, props.row)
-  let correct = props.isCorrectTile(props.col, props.row)
-  let col = ''
+  let clicked = props.isClickedTile(props.col, props.row);
+  let correct = props.isCorrectTile(props.col, props.row);
+  let col = "";
 
   if (clicked) {
-    col = '#ffffff'
+    col = "#ffffff";
   } else {
-    col = '#2573c1'
+    col = "#2573c1";
   }
 
   if (props.memorizing && correct) {
-    col = '#ffffff'
+    col = "#ffffff";
+  }
+
+  if (clicked && !correct) {
+    col = "#154368";
   }
 
   return (
-    <div className="Button" 
-      style={{backgroundColor: col}}
-      onClick={event => props.handleClick(props.col, props.row)}
+    <div
+      className="Button"
+      style={{ backgroundColor: col }}
+      onClick={(event) => props.handleClick(props.col, props.row)}
     />
-  )
+  );
 }
 
-const useStateWithPromise = defaultVal => {
+const useStateWithPromise = (defaultVal) => {
   let [state, setState] = React.useState({
     value: defaultVal,
-    resolve: () => {}
+    resolve: () => {},
   });
 
-  React.useEffect(
-    () => {
-      state.resolve(state.value);
-    },
-    [state]
-  );
+  React.useEffect(() => {
+    state.resolve(state.value);
+  }, [state]);
 
   return [
     state.value,
-    updater => {
-      return new Promise(resolve => {
-        setState(prevState => {
+    (updater) => {
+      return new Promise((resolve) => {
+        setState((prevState) => {
           let nextVal = updater;
           if (typeof updater === "function") {
             nextVal = updater(prevState.value);
           }
           return {
             value: nextVal,
-            resolve
+            resolve,
           };
         });
       });
-    }
+    },
   ];
 };
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
 function App() {
-  const [visible, updateVisible] = React.useState(!IS_PROD)
-  const [memorizing, setMemorizing] = React.useState(true)
-  const [requiredTiles, setRequiredTiles] = React.useState(0)
-  const [rows, setRows] = React.useState(0)
-  const [columns, setColumns] = React.useState(0)
+  const [visible, updateVisible] = React.useState(!IS_PROD);
+  const [memorizing, setMemorizing] = React.useState(true);
+  const [requiredTiles, setRequiredTiles] = React.useState(0);
+  const [rows, setRows] = React.useState(0);
+  const [columns, setColumns] = React.useState(0);
+  const memorizingTimeout = React.useRef();
 
   const [values, setValues] = useStateWithPromise({
-      clicked: [],
-      correctTiles: [],
-  })
+    clicked: [],
+    correctTiles: [],
+  });
 
   function setValue(name, value) {
-    setValues({ ...values, [name]: value })
+    setValues({ ...values, [name]: value });
   }
-  
+
   function isCorrectTile(col, row, correctTiles) {
-    let correct = false
-    let cTiles = correctTiles ? correctTiles : values.correctTiles
-    for (let i=0; i<cTiles.length; i++) {
-      let data = cTiles[i]
-      
+    let correct = false;
+    let cTiles = correctTiles ? correctTiles : values.correctTiles;
+    for (let i = 0; i < cTiles.length; i++) {
+      let data = cTiles[i];
+
       if (data[0] === col && data[1] === row) {
-        correct = true
-      }  
+        correct = true;
+      }
     }
-    return correct
+    return correct;
   }
 
   function isClickedTile(col, row, tileList) {
     let clicked = false;
-    let vals = tileList ? tileList : values.clicked
+    let vals = tileList ? tileList : values.clicked;
 
-    for (let i=0; i<vals.length; i++) {
-      let data = vals[i]
-      
+    for (let i = 0; i < vals.length; i++) {
+      let data = vals[i];
+
       if (data[0] === col && data[1] === row) {
-        clicked = true
-      }  
+        clicked = true;
+      }
     }
 
-    return clicked
+    return clicked;
   }
 
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
-  
   function _generateCorrectTile(cols, rows, tileList, correctTiles) {
-    let col = getRandomInt(cols)
-    let row = getRandomInt(rows)
+    let col = getRandomInt(cols);
+    let row = getRandomInt(rows);
 
     if (isCorrectTile(col, row, tileList, correctTiles)) {
-      return _generateCorrectTile(cols, rows, tileList, correctTiles)
+      return _generateCorrectTile(cols, rows, tileList, correctTiles);
     }
 
-    return [col, row]
+    return [col, row];
   }
 
   function generateNewCorrectTiles(cols, rows, tiles, correctTiles) {
-    let newCorrectTiles = []
-    for (let i=0; i<tiles; i++) {
-      let [col, row] = _generateCorrectTile(cols, rows, newCorrectTiles, correctTiles)
+    let newCorrectTiles = [];
+    for (let i = 0; i < tiles; i++) {
+      let [col, row] = _generateCorrectTile(
+        cols,
+        rows,
+        newCorrectTiles,
+        correctTiles
+      );
 
-      newCorrectTiles.push([col, row])
+      newCorrectTiles.push([col, row]);
     }
-    setValue('correctTiles', newCorrectTiles)
+    setValue("correctTiles", newCorrectTiles);
   }
 
   async function startGame(data) {
-    setRequiredTiles(data.tiles)
+    setRequiredTiles(data.tiles);
 
-    setRows(data.rows)
-    setColumns(data.columns)
+    setRows(data.rows);
+    setColumns(data.columns);
 
     let newValues = {
       clicked: [],
       correctTiles: [],
-    }
+    };
 
-    setValues(newValues)
-    generateNewCorrectTiles(data.columns, data.rows, data.tiles, data.correctTiles)
-    setMemorizing(true)
+    setValues(newValues);
+    generateNewCorrectTiles(
+      data.columns,
+      data.rows,
+      data.tiles,
+      data.correctTiles
+    );
+    setMemorizing(true);
 
-    setTimeout(() => {
-      setMemorizing(false)
-    }, data.memorizeTime)
-
+    memorizingTimeout.current = setTimeout(() => {
+      setMemorizing(false);
+    }, data.memorizeTime);
   }
 
-  async function endGame(success) {
-    doEvent('endGame', {success: success}, []).then(() => {
-      setColumns(0)
-      setRows(0)
-      setRequiredTiles(100)
+  function endGame(success) {
+    doEvent("endGame", { success: success }, []).then(() => {
+      setColumns(0);
+      setRows(0);
+      setRequiredTiles(100);
 
       let newValues = {
         clicked: [],
         correctTiles: [],
-      }
-  
-      setValues(newValues)  
-    })
+      };
+
+      setValues(newValues);
+    });
   }
 
   React.useEffect(() => {
     if (!IS_PROD) {
       startGame({
-        rows: 20,
-        columns: 10,
-        tiles: 75,
-  
-        memorizeTime: 2000
-      })
+        rows: 5,
+        columns: 5,
+        tiles: 10,
+
+        memorizeTime: 2000,
+      });
     }
 
-    window.addEventListener("message", ((event) => {
+    window.addEventListener("message", (event) => {
+      console.table(event.data);
+
       if (event.data.show !== undefined) {
-        updateVisible(event.data.show)
+        updateVisible(event.data.show);
       }
       if (event.data.play !== undefined) {
-        startGame(event.data)
+        startGame(event.data);
       }
-    }))
+    });
 
-    window.addEventListener("keydown", ((event) => {
-      if (event.key === 'Escape') {
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
         if (visible) {
-          endGame(false)
+          endGame(false);
         }
       }
-    }))
-  }, [])
+    });
+
+    return () => {
+      // Clean up
+      clearTimeout(memorizingTimeout.current);
+    };
+  }, []);
+
+  function getTotalCorrectTiles() {
+    let correct = 0;
+    for (let i = 0; i < values.clicked.length; i++) {
+      if (isCorrectTile(values.clicked[i][0], values.clicked[i][1])) {
+        correct += 1;
+      }
+    }
+    return correct;
+  }
+
+  function getTotalWrongTiles() {
+    let wrong = 0;
+    for (let i = 0; i < values.clicked.length; i++) {
+      if (!isCorrectTile(values.clicked[i][0], values.clicked[i][1])) {
+        wrong += 1;
+      }
+    }
+    return wrong;
+  }
 
   function handleClick(col, row) {
-    if (memorizing) {
-      return
+    let clicked = isClickedTile(col, row);
+    if (memorizing || clicked) {
+      return;
     }
     setValues((values) => {
-      let correct = isCorrectTile(col, row)
+      let correct = isCorrectTile(col, row);
       if (!correct) {
-        endGame(false)
+        let totalWrongTiles = getTotalWrongTiles() + 1;
+        if (totalWrongTiles === 3) {
+          endGame(false);
+        }
       } else {
-        let totalCorrectTiles = values.clicked.length + 1
+        let totalCorrectTiles = getTotalCorrectTiles() + 1;
         if (totalCorrectTiles === requiredTiles) {
-          endGame(true)
+          endGame(true);
         }
       }
-  
-      return { ...values, clicked: [ ...values.clicked, [col, row] ]}
-    })
+
+      return { ...values, clicked: [...values.clicked, [col, row]] };
+    });
   }
-  
+
   return (
-    <div className="App" style={{display: visible ? 'block' : 'none'}}>
-        <div className="Main">
+    <div>
+      {visible && (
+        <div className="App">
+          <div className="Main">
             <div className="ItemsHolder">
-              {[...Array(columns)].map((x, col) =>
+              {[...Array(columns)].map((x, col) => (
                 <div className="Row">
-                  {[...Array(rows)].map((x, row) =>
-                    <Square 
+                  {[...Array(rows)].map((x, row) => (
+                    <Square
                       row={row}
                       col={col}
                       values={values}
                       handleClick={handleClick}
-
                       isClickedTile={isClickedTile}
                       isCorrectTile={isCorrectTile}
                       memorizing={memorizing}
                     />
-                  )}
+                  ))}
                 </div>
-              )}
+              ))}
             </div>
+          </div>
         </div>
+      )}
     </div>
   );
 }
