@@ -137,7 +137,7 @@ function App() {
         correctTiles
       );
 
-      newCorrectTiles.push([col, row]);
+      newCorrectTiles = [...newCorrectTiles, [col, row]];
     }
     setValue("correctTiles", newCorrectTiles);
   }
