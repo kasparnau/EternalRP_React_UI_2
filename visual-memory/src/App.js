@@ -207,11 +207,11 @@ function App() {
   React.useEffect(() => {
     if (!IS_PROD) {
       startGame({
-        rows: 5,
-        columns: 5,
-        tiles: 10,
+        rows: 6,
+        columns: 6,
+        tiles: 14,
 
-        memorizeTime: 500,
+        memorizeTime: 2500,
       });
     }
 
