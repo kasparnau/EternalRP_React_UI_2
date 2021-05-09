@@ -49,47 +49,47 @@ function App() {
       "fetchCharacters",
       [],
       [
-        {
-          character_id: 3,
-          character_name: "Pede Homo",
-          gender: 0,
-          date_of_birth: "1999-01-01",
-          faction: {
-            group: {
-              faction_name: "LSPD",
-            },
-            member: {
-              rank_name: "Chief of Police",
-              rank_level: 100,
-            },
-          },
-          job: "",
-          phone_number: 396543813,
-          dead: null,
-          prison: null,
-        },
-        {
-          character_id: 4,
-          character_name: "Barack Obama",
-          gender: 0,
-          date_of_birth: "1999-01-01",
-          faction: null,
-          job: "",
-          phone_number: 133623245,
-          dead: null,
-          prison: true,
-        },
-        {
-          character_id: 5,
-          character_name: "Uuga Buuga",
-          gender: 0,
-          date_of_birth: "1992-06-31",
-          faction: null,
-          job: "",
-          phone_number: 133623245,
-          dead: null,
-          prison: null,
-        },
+        // {
+        //   character_id: 3,
+        //   character_name: "Pede Homo",
+        //   gender: 0,
+        //   date_of_birth: "1999-01-01",
+        //   faction: {
+        //     group: {
+        //       faction_name: "LSPD",
+        //     },
+        //     member: {
+        //       rank_name: "Chief of Police",
+        //       rank_level: 100,
+        //     },
+        //   },
+        //   job: "",
+        //   phone_number: 396543813,
+        //   dead: null,
+        //   prison: null,
+        // },
+        // {
+        //   character_id: 4,
+        //   character_name: "Barack Obama",
+        //   gender: 0,
+        //   date_of_birth: "1999-01-01",
+        //   faction: null,
+        //   job: "",
+        //   phone_number: 133623245,
+        //   dead: null,
+        //   prison: true,
+        // },
+        // {
+        //   character_id: 5,
+        //   character_name: "Uuga Buuga",
+        //   gender: 0,
+        //   date_of_birth: "1992-06-31",
+        //   faction: null,
+        //   job: "",
+        //   phone_number: 133623245,
+        //   dead: null,
+        //   prison: null,
+        // },
       ]
     ).then((result) => {
       setCharacters(result);
@@ -168,7 +168,9 @@ function App() {
             {!loading && (
               <React.Fragment>
                 <div className="Top">
-                  <div style={{ padding: "1rem" }}>Welcome to JahPede :)</div>
+                  <div style={{ padding: "1rem" }}>
+                    Liitu meie discordiga @ https://discord.io/pask :)
+                  </div>
                 </div>
                 <div className="Characters">
                   {characters.length > 0 &&
@@ -227,6 +229,21 @@ function App() {
                         </div>
                       );
                     })}
+                  {characters.length === 0 && (
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        fontFamily: "Roboto",
+                        fontSize: "1.5rem",
+                        color: "white",
+                      }}
+                    >
+                      You don't have any characters.
+                    </div>
+                  )}
                 </div>
                 <div className="Bottom">
                   <Button
