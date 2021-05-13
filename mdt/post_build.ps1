@@ -1,0 +1,1 @@
+Copy-Item "./build/*" -Destination "C:\Users\Klicer\Documents\FiveServer2\server-data\resources\[local]\jp-mdt\build" -Recurse -force

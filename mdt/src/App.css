@@ -1,0 +1,177 @@
+.App {
+    top: 50%;
+    left: 50%;
+    color: white;
+    width: 80vw;
+    height: 90vh;
+    display: flex;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    pointer-events: all;
+    background-color: rgb(48, 69, 95);
+    font-family: 'DM Mono';
+}
+
+.Topbar {
+    width: 100%;
+    height: 10vh;
+    background-color: rgb(18 38 60);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    font-size: 30px;
+    font-family: 'DM Mono', monospace;
+}
+
+.Main {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+}
+
+.Sidebar {
+    width: 20%;
+    height: 100%;
+    background-color: #151b27;
+    overflow: auto;
+}
+
+.SidebarButton {
+    cursor: pointer;
+    padding: 16px;
+}
+
+.SidebarButton:hover {
+    background-color: #30455f;
+}
+
+.Container {
+    width: 100%;
+    padding: 8px;
+}
+
+.Spinner {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 
+  *PAGES
+*/
+
+.PageMain {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    font-size: 20px;
+}
+
+.PageSectionContainer {
+    width: 100%;
+    display: flex;
+    padding: 8px;
+    flex-direction: column;
+    background-color: rgb(18 38 60);
+}
+
+.PageSectionPadding {
+    padding: 4px;
+}
+
+.SearchBar {
+    width: 95%;
+    height: 95%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ListItemsContainer {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.ListItem {
+    padding: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    flex-direction: column;
+    background-color: hsla(218, 31%, 12%, 0.541);
+    font-size: 14px;
+}
+
+.ListItem:hover {
+    background-color: hsl(218, 31%, 12%);
+}
+
+.ModalContainer {
+    display: flex;
+    padding: 16px;
+    box-sizing: border-box;
+    flex-direction: column;
+    background-color: #151b27;
+    border-radius: 16px;
+    border: 4px solid #30455f;
+
+    width: 25vw;
+    min-width: 300px;
+}
+
+.Modal {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ModalTopbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.205);
+
+    background: hsla(334, 33%, 28%, 0.822);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: hsl(334, 33%, 28%);
+}
+
+div.DraftEditor-root {
+    background-color: #151b27;
+    height: 100%;
+    overflow-y: auto;
+}
+div.DraftEditor-editorContainer,
+div.public-DraftEditor-content {
+    height: 100%;
+}

@@ -1,0 +1,105 @@
+@import 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet';
+
+:root {
+  --red: hsl(354, 61%, 40%);
+  --green: rgb(33 131 80);
+}
+
+.Main {
+  top: 50%;
+  left: 50%;
+  color: white;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", sans-serif;
+  overflow: hidden;
+}
+
+.Holder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.GradientBackground {
+  height: 100%;
+  width: 100%;
+
+  background: linear-gradient(-45deg, #bb5d41, #bd3166, #176c8b, #1aa081);
+  background-size: 400% 400%;
+  animation: gradient 450s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.Topbar {
+  width: 100%;
+  height: 7vh;
+  background-color: #252636;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: white;
+  font-size: 30px;
+  font-family: "Roboto";
+}
+
+.NavMenu {
+  width: 15%;
+  min-width: 200px;
+  height: 100%;
+  background-color: #252636;
+  flex-direction: column;
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.SidebarButton {
+  cursor: pointer;
+  width: 100%;
+
+  font-family: "Inter", sans-serif;
+  background-color: #252636;
+  color: "#71748c";
+  font-size: 1.125rem;
+}
+
+.Container {
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #252636;
+}
+
+.PageMain {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-y: auto;
+}
+
+.CoolBoxHolder {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto;
+}
