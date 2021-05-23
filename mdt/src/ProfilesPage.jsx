@@ -14,8 +14,13 @@ import {
     TextField,
 } from '@material-ui/core'
 import Chip from '@material-ui/core/Chip'
-import { Editor, EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 import Modal from 'react-modal'
+
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css' // ES6
+
+import DriveEtaIcon from '@material-ui/icons/DriveEta'
+import HomeIcon from '@material-ui/icons/Home'
 
 import moment from 'moment'
 
@@ -49,8 +54,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function MakeWantedModal(props) {
-    const { closeModal, values, setValue } = props
+    const { closeModal } = props
     const classes = useStyles()
+    const [reason, setReason] = useState('')
+
     return (
         <div style={{ height: '100%', weight: '100%' }}>
             <div
@@ -69,11 +76,10 @@ function MakeWantedModal(props) {
                         Reason
                     </InputLabel>
                     <FilledInput
-                        id="filled-adornment-amount"
-                        value={values.reason}
+                        value={reason}
                         multiline
                         onChange={(event) => {
-                            setValue('reason', event.target.value)
+                            setReason(event.target.value)
                         }}
                     />
                 </FormControl>
@@ -99,10 +105,12 @@ function MakeWantedModal(props) {
                     CANCEL
                 </Button>
                 <Button
-                    onClick={props.makeWanted}
+                    onClick={() => {
+                        props.makeWanted(reason)
+                    }}
                     style={{
                         width: '50%',
-                        backgroundColor: 'rgb(218, 82, 89)',
+                        backgroundColor: 'var(--red)',
                         marginLeft: '5px',
                     }}
                 >
@@ -127,15 +135,16 @@ function Searchbar(props) {
                 justifyContent: 'space-between',
             }}
         >
-            <div style={{ maxWidth: '40%' }}>{props.name}</div>
+            <div style={{ maxWidth: '40%', fontSize: '1.0rem' }}>
+                {props.name}
+            </div>
             <div style={{ maxWidth: '60%' }}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="standard-adornment-amount">
-                        Search
+                        Name
                     </InputLabel>
                     <Input
                         style={{ color: 'white' }}
-                        id="standard-adornment-amount"
                         value={props.value}
                         onChange={props.handleChange}
                         startAdornment={
@@ -166,16 +175,6 @@ function DataSection(props) {
     )
 }
 
-function SortListByTime(a, b) {
-    if (a.timestamp < b.timestamp) {
-        return 1
-    }
-    if (a.timestamp > b.timestamp) {
-        return -1
-    }
-    return 0
-}
-
 function ProfileDiv(props) {
     const profile = props.profile
     return (
@@ -189,33 +188,16 @@ function ProfileDiv(props) {
 }
 
 function Page(props) {
-    const [searchBarValue, setSearchBarValue] = useState('')
-    const [profileRows, setProfileRows] = useState([])
+    const { profileRows, setProfileRows } = useProfileStore()
+    const { searchBarValue, setSearchBarValue } = useProfileStore()
 
-    const changeProfilePageCharacterId = useProfileStore(
-        (state) => state.changeCurrentCharacterId
-    ) /* CHANGE SELECTED PROFILE */
-
-    const currentCharacterId = useProfileStore(
-        (store) => store.currentCharacterId
-    ) /* CURRENT SELECTED PROFILE */
-
-    const changeProfilePageData = useProfileStore(
-        (state) => state.changeProfilePageData
-    ) /* CHANGE SELECTED PROFILE */
-
-    const profilePageData = useProfileStore(
-        (store) => store.profilePageData
-    ) /* CURRENT SELECTED PROFILE */
+    const { changeCurrentCharacterId, currentCharacterId } = useProfileStore()
+    const { setCurrentProfile, currentProfile } = useProfileStore()
+    const { currentProfileImageURL, setCurrentProfileImageURL } =
+        useProfileStore()
+    const { editorState, setEditorState } = useProfileStore()
 
     // MODAL STUFF START
-    const [modalValues, setModalValues] = React.useState({
-        reason: '',
-    })
-
-    function setModalValue(name, value) {
-        setModalValues({ ...modalValues, [name]: value })
-    }
     const [currentModal, setCurrentModal] = useState(false)
 
     function closeModal() {
@@ -227,17 +209,6 @@ function Page(props) {
     }
     // MODAL STUFF END
 
-    const [currentProfileImageURL, setCurrentProfileImageURL] = useState('')
-
-    const [editorState, setEditorState] = React.useState(() =>
-        EditorState.createEmpty()
-    )
-
-    React.useEffect(() => {
-        const contentState = editorState.getCurrentContent()
-        console.log('content state', JSON.stringify(convertToRaw(contentState)))
-    }, [editorState])
-
     function reloadPage() {
         props
             .doNuiAction(
@@ -245,13 +216,24 @@ function Page(props) {
                 { character_id: currentCharacterId },
                 {
                     character_id: 3,
-                    character_name: 'Big Name',
+                    character_name: 'Juhan Kallas',
                     profile_image_url: 'https://i.imgur.com/LExuDrt.png',
+                    born: '1999-01-01',
                     faction_name: 'LSPD',
-                    warrant: {
-                        reason: 'LOL!!!!!',
-                        last_update: 1620679520,
-                    },
+                    description: 'LOL',
+
+                    // warrant: {
+                    //     reason: 'LOL!!!!!',
+                    //     last_update: 1620679520,
+                    // },
+
+                    vehicles: [
+                        { plate: 'ABCD1234', model: 'Sultan MK2' },
+                        { plate: 'ABCD1235', model: 'Futo' },
+                        { plate: 'ABCD1236', model: 'Nigga' },
+                    ],
+
+                    housing: [],
                 }
             )
             .then((resp) => {
@@ -259,28 +241,24 @@ function Page(props) {
                     resp.profile_image_url ? resp.profile_image_url : ''
                 )
                 if (resp.description) {
-                    setEditorState(
-                        EditorState.createWithContent(
-                            convertFromRaw(JSON.parse(resp.description))
-                        )
-                    )
+                    setEditorState(resp.description)
                 } else {
-                    setEditorState(EditorState.createEmpty())
+                    setEditorState('')
                 }
-                changeProfilePageData(resp)
+
+                setCurrentProfile(resp)
             })
     }
 
-    function makeWanted() {
-        console.log(profilePageData.character_id, modalValues.reason)
+    function makeWanted(reason) {
         setCurrentModal(false)
 
         props
             .doNuiAction(
                 'makeWanted',
                 {
-                    character_id: profilePageData.character_id,
-                    reason: modalValues.reason,
+                    character_id: currentProfile.character_id,
+                    reason,
                 },
                 {}
             )
@@ -294,7 +272,7 @@ function Page(props) {
             .doNuiAction(
                 'removeWarrant',
                 {
-                    character_id: profilePageData.character_id,
+                    character_id: currentProfile.character_id,
                 },
                 []
             )
@@ -303,22 +281,33 @@ function Page(props) {
             })
     }
 
-    function saveProfile() {
-        const contentState = JSON.stringify(
-            convertToRaw(editorState.getCurrentContent())
-        )
-
+    const checkCharacterCount = (event) => {
+        const ctrlA = event.code == 'KeyA' && event.ctrlKey
         if (
-            currentProfileImageURL !== profilePageData.profile_image_url ||
-            contentState !== profilePageData.description
+            editorState.length >= 2000 &&
+            event.key !== 'Backspace' &&
+            ctrlA === false
+        ) {
+            event.preventDefault()
+        }
+    }
+
+    function handleEditorState(value) {
+        setEditorState(value)
+    }
+
+    function saveProfile() {
+        if (
+            currentProfileImageURL !== currentProfile.profile_image_url ||
+            editorState !== currentProfile.description
         ) {
             props
                 .doNuiAction(
                     'updateProfile',
                     {
                         profile_image_url: currentProfileImageURL,
-                        description: contentState,
-                        character_id: profilePageData.character_id,
+                        description: editorState,
+                        character_id: currentProfile.character_id,
                     },
                     []
                 )
@@ -330,7 +319,11 @@ function Page(props) {
 
     React.useEffect(() => {
         if (currentCharacterId !== 0) {
-            reloadPage()
+            if (currentProfile?.character_id === currentCharacterId) {
+                return
+            } else {
+                reloadPage()
+            }
         }
     }, [currentCharacterId])
 
@@ -343,7 +336,6 @@ function Page(props) {
                 searchBarDebounceId.current === lastId &&
                 searchBarValue.length >= 3
             ) {
-                setProfileRows([])
                 props
                     .doNuiAction(
                         'getProfileResults',
@@ -373,7 +365,12 @@ function Page(props) {
         <div className="PageMain">
             <div
                 className="PageSectionContainer"
-                style={{ width: '35%', alignItems: 'center' }}
+                style={{
+                    width: '25%',
+                    alignItems: 'center',
+                    minWidth: '150px',
+                    maxWidth: '250px',
+                }}
             >
                 <Searchbar
                     name={'Profiles'}
@@ -387,9 +384,7 @@ function Page(props) {
                         <ProfileDiv
                             profile={profile}
                             onClick={() => {
-                                changeProfilePageCharacterId(
-                                    profile.character_id
-                                )
+                                changeCurrentCharacterId(profile.character_id)
                             }}
                         />
                     ))}
@@ -397,7 +392,7 @@ function Page(props) {
             </div>
             <div className="PageSectionPadding" />
             <div className="PageSectionContainer" style={{ width: '100%' }}>
-                {!profilePageData && (
+                {!currentProfile && (
                     <div
                         style={{
                             width: '100%',
@@ -410,7 +405,7 @@ function Page(props) {
                         No Profile Selected
                     </div>
                 )}
-                {profilePageData && (
+                {currentProfile && (
                     <div
                         style={{
                             height: '100%',
@@ -420,7 +415,7 @@ function Page(props) {
                     >
                         <div
                             style={{
-                                width: '50%',
+                                width: '55%',
                                 height: '100%',
                                 marginRight: '16px',
                                 display: 'flex',
@@ -429,26 +424,35 @@ function Page(props) {
                         >
                             <div
                                 style={{
+                                    width: '100%',
                                     display: 'flex',
                                     justifyContent: 'flex-start',
                                 }}
                             >
-                                <div style={{ width: '40%' }}>
-                                    Profile (#{profilePageData.character_id})
-                                </div>
+                                <div>Profile</div>
                                 <div
                                     style={{
-                                        width: '60%',
+                                        width: '100%',
+                                        marginLeft: '4px',
                                         display: 'flex',
                                         justifyContent: 'flex-end',
                                     }}
                                 >
                                     <div>
-                                        {!!!profilePageData.warrant && (
+                                        <Button
+                                            style={{
+                                                backgroundColor:
+                                                    'var(--yellow)',
+                                                marginRight: '8px',
+                                            }}
+                                        >
+                                            BILLS
+                                        </Button>
+                                        {!!!currentProfile.warrant && (
                                             <Button
                                                 style={{
                                                     backgroundColor:
-                                                        'rgb(218, 82, 89)',
+                                                        'var(--red)',
                                                     marginRight: '8px',
                                                 }}
                                                 onClick={openWantedModal}
@@ -456,11 +460,11 @@ function Page(props) {
                                                 MAKE WANTED
                                             </Button>
                                         )}
-                                        {!!profilePageData.warrant && (
+                                        {!!currentProfile.warrant && (
                                             <Button
                                                 style={{
                                                     backgroundColor:
-                                                        'rgb(218, 82, 89)',
+                                                        'var(--red)',
                                                     marginRight: '8px',
                                                 }}
                                                 onClick={removeWarrant}
@@ -468,12 +472,9 @@ function Page(props) {
                                                 REMOVE WARRANT
                                             </Button>
                                         )}
-                                    </div>
-                                    <div>
                                         <Button
                                             style={{
-                                                backgroundColor:
-                                                    'rgb(37, 146, 81)',
+                                                backgroundColor: 'var(--green)',
                                             }}
                                             onClick={saveProfile}
                                         >
@@ -486,8 +487,8 @@ function Page(props) {
                                 <div style={{ height: '100%', width: '8vw' }}>
                                     <img
                                         src={
-                                            profilePageData.profile_image_url
-                                                ? profilePageData.profile_image_url
+                                            currentProfile.profile_image_url
+                                                ? currentProfile.profile_image_url
                                                 : 'https://i.imgur.com/CnRussR.jpg'
                                         }
                                         style={{
@@ -504,20 +505,21 @@ function Page(props) {
                                     }}
                                 >
                                     <div>
-                                        Name: {profilePageData.character_name}
+                                        Name: {currentProfile.character_name}
                                     </div>
-                                    <div style={{ marginTop: '8px' }}>
+                                    <div>Born: {currentProfile.born}</div>
+                                    <div>
                                         Citizen ID:{' '}
-                                        {profilePageData.character_id}
+                                        {currentProfile.character_id}
                                     </div>
-                                    <div style={{ marginTop: '8px' }}>
-                                        {profilePageData.faction_name && (
+                                    <div>
+                                        {currentProfile.faction_name && (
                                             <div>
                                                 Faction:{' '}
-                                                {profilePageData.faction_name}
+                                                {currentProfile.faction_name}
                                             </div>
                                         )}
-                                        {!profilePageData.faction_name && (
+                                        {!currentProfile.faction_name && (
                                             <div>No Faction</div>
                                         )}
                                     </div>
@@ -533,7 +535,6 @@ function Page(props) {
                                             </InputLabel>
                                             <Input
                                                 style={{ color: 'white' }}
-                                                id="standard-adornment-amount"
                                                 value={currentProfileImageURL}
                                                 onChange={(event) => {
                                                     setCurrentProfileImageURL(
@@ -548,78 +549,51 @@ function Page(props) {
                             <div style={{ paddingTop: '16px' }} />
                             <div
                                 style={{
-                                    backgroundColor: '#151b27',
-                                    height: '100%',
-                                    overflow: 'hidden',
                                     fontFamily: 'Roboto',
-                                    fontSize: '16px',
+                                    backgroundColor: 'var(--dark)',
+                                    overflowY: 'hidden',
                                 }}
                             >
-                                <Editor
-                                    editorState={editorState}
-                                    onChange={setEditorState}
+                                <ReactQuill
+                                    style={{
+                                        color: 'white',
+                                        height: '600px',
+                                        overflowWrap: 'anywhere',
+                                        wordBreak: 'break-all',
+                                        border: '0 !important',
+                                    }}
+                                    value={editorState}
+                                    onChange={handleEditorState}
+                                    placeholder={'Description about person'}
+                                    onKeyDown={checkCharacterCount}
                                 />
                             </div>
-                            {/* INFO END - BUTTONS START */}
-                            {/* <div
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        marginRight: '16px',
-                                    }}
-                                >
-                                    <Button
-                                        style={{
-                                            backgroundColor: 'rgb(218, 82, 89)',
-                                        }}
-                                        onClick={saveProfile}
-                                    >
-                                        MAKE WANTED
-                                    </Button>
-                                </div>
-
-                                <div style={{ marginRight: '16px' }}>
-                                    <Button
-                                        style={{
-                                            backgroundColor: 'rgb(37, 146, 81)',
-                                            width: '25%',
-                                        }}
-                                        onClick={saveProfile}
-                                    >
-                                        SAVE
-                                    </Button>
-                                </div>
-                            </div> */}
                         </div>
                         <div
                             style={{
-                                width: '50%',
+                                width: '45%',
                                 height: '100%',
+                                overflowY: 'auto',
                             }}
                         >
-                            {!!profilePageData.warrant && (
+                            {!!currentProfile.warrant && (
                                 <DataSection
                                     name="PERSON IS WANTED"
                                     color="red"
                                 >
                                     <div
                                         style={{
-                                            fontSize: '14px',
+                                            fontSize: '0.88rem',
                                             color: 'white',
                                         }}
                                     >
                                         <div>
-                                            Reason:{' '}
-                                            {profilePageData.warrant.reason}
+                                            {currentProfile.warrant.reason}
                                         </div>
                                         <Divider />
                                         <div>
                                             {moment(
-                                                profilePageData.warrant
+                                                currentProfile.warrant
                                                     .last_update * 1000
                                             ).fromNow()}
                                         </div>
@@ -630,10 +604,24 @@ function Page(props) {
                                 <Chip label="Drivers License" />
                             </DataSection>
                             <DataSection name="Vehicles" marginTop>
-                                <Chip label="Drivers License" />
+                                {currentProfile.vehicles &&
+                                    currentProfile.vehicles.map((vehicle) => (
+                                        <Chip
+                                            icon={<DriveEtaIcon />}
+                                            style={{ margin: '2px' }}
+                                            label={`${vehicle.plate} - ${vehicle.model}`}
+                                        />
+                                    ))}
                             </DataSection>
                             <DataSection name="Housing" marginTop>
-                                <Chip label="Drivers License" />
+                                {currentProfile.housing &&
+                                    currentProfile.housing.map((property) => (
+                                        <Chip
+                                            icon={<HomeIcon />}
+                                            style={{ margin: '2px' }}
+                                            label={`${property.street}`}
+                                        />
+                                    ))}
                             </DataSection>
                             <DataSection name="Priors" marginTop>
                                 <Chip label="Drivers License" />
@@ -663,8 +651,6 @@ function Page(props) {
                         <div className="ModalContainer">
                             <MakeWantedModal
                                 closeModal={closeModal}
-                                values={modalValues}
-                                setValue={setModalValue}
                                 makeWanted={makeWanted}
                             />
                         </div>

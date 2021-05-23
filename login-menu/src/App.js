@@ -40,6 +40,11 @@ function App() {
   });
 
   function setValue(name, value) {
+    if (name == "first_name" || name == "last_name") {
+      value = value.replace(/\s+/g, "");
+      value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+      value = value.replace(/[0-9]/g, "");
+    }
     setValues({ ...values, [name]: value });
   }
 
@@ -116,14 +121,12 @@ function App() {
   }
 
   function canCreate() {
-    let c1 = values.first_name.length >= 3;
-    let c2 = values.last_name.length >= 3;
+    let c1 = values.first_name.length >= 3 && values.first_name.length <= 25;
+    let c2 = values.last_name.length >= 3 && values.last_name.length <= 25;
     let c3 = values.gender === "female" || values.gender === "male";
     let c4 =
       new Date(values.born) < new Date("2000-01-02") &&
       new Date(values.born) > new Date("1899-12-31");
-
-    console.log(values.born);
 
     return c1 && c2 && c3 && c4;
   }

@@ -2,6 +2,7 @@ import './App.css'
 import React, { useState } from 'react'
 
 import { useProfileStore } from './store'
+import { useDashboardStore } from './store'
 
 import {
     FormControl,
@@ -83,42 +84,45 @@ function SortListByTime(a, b) {
 
 function Page(props) {
     const [searchBarValue, setSearchBarValue] = useState('')
-    const [bulletins, setBulletins] = useState([])
-    const [warrants, setWarrants] = useState([])
 
-    const changeProfilePageCharacterId = useProfileStore(
-        (state) => state.changeCurrentCharacterId
-    ) /* FOR SETTING CURRENT PROFILE PAGE */
+    const { changeCurrentCharacterId } = useProfileStore()
+    const { bulletins, warrants, setBulletins, setWarrants } =
+        useDashboardStore()
 
     function reloadPage() {
         props
-            .doNuiAction('fetchDashboardPage', [], {
-                warrants: [
-                    {
-                        id: 1,
-                        timestamp: 1620665732,
-                        character_id: 3,
-                        character_name: 'Jean Pual',
-                        reason: 'Really nigga? 5 Cops for this?',
-                    },
-                    {
-                        id: 2,
-                        timestamp: 1620665792,
-                        character_id: 4,
-                        character_name: 'Indrek Lindsalu',
-                        reason: 'Ei ole ikka veel moelnud serverile nime valja  >:(>?(::>:(>(:(:>Ei ole ikka veel moelnud serverile nime valja  >:(>?(::>:(>(:(:>',
-                    },
-                ],
-                bulletins: [
-                    {
-                        id: 1,
-                        timestamp: 1608832019,
-                        title: 'Tazerid',
-                        description:
-                            'inimeste autodest tazeriga vÃ¤lja laskmine = ban',
-                    },
-                ],
-            })
+            .doNuiAction(
+                'fetchDashboardPage',
+                [],
+                {
+                    warrants: [
+                        {
+                            id: 1,
+                            timestamp: 1620665732,
+                            character_id: 3,
+                            character_name: 'Jean Pual',
+                            reason: 'Really nigga? 5 Cops for this?',
+                        },
+                        {
+                            id: 2,
+                            timestamp: 1620665792,
+                            character_id: 4,
+                            character_name: 'Indrek Lindsalu',
+                            reason: 'Ei ole ikka veel moelnud serverile nime valja  >:(>?(::>:(>(:(:>Ei ole ikka veel moelnud serverile nime valja  >:(>?(::>:(>(:(:>',
+                        },
+                    ],
+                    bulletins: [
+                        {
+                            id: 1,
+                            timestamp: 1608832019,
+                            title: 'Tazerid',
+                            description:
+                                'inimeste autodest tazeriga vÃ¤lja laskmine = ban',
+                        },
+                    ],
+                },
+                true
+            )
             .then((resp) => {
                 setBulletins(resp.bulletins.sort(SortListByTime))
                 setWarrants(resp.warrants.sort(SortListByTime))
@@ -148,9 +152,7 @@ function Page(props) {
                             warrant={warrant}
                             onClick={() => {
                                 props.setPage('Profiles')
-                                changeProfilePageCharacterId(
-                                    warrant.character_id
-                                )
+                                changeCurrentCharacterId(warrant.character_id)
                             }}
                         />
                     ))}
