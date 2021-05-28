@@ -18,10 +18,6 @@ import Modal from 'react-modal'
 
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css' // ES6
-
-import DriveEtaIcon from '@material-ui/icons/DriveEta'
-import HomeIcon from '@material-ui/icons/Home'
-
 import moment from 'moment'
 
 const useStyles = makeStyles((theme) => ({
@@ -234,6 +230,8 @@ function Page(props) {
                     ],
 
                     housing: [],
+                    priors: [],
+                    licenses: [],
                 }
             )
             .then((resp) => {
@@ -360,6 +358,27 @@ function Page(props) {
             }
         }, 200)
     }, [searchBarValue])
+
+    const removeLicense = (license) => {
+        props
+            .doNuiAction(
+                'removeLicense',
+                { character_id: currentProfile.character_id, license },
+                [],
+                true
+            )
+            .then((success) => {
+                if (success) {
+                    const newLicenses = currentProfile.licenses.filter(
+                        (name) => name !== license
+                    )
+                    setCurrentProfile({
+                        ...currentProfile,
+                        licenses: newLicenses,
+                    })
+                }
+            })
+    }
 
     return (
         <div className="PageMain">
@@ -601,13 +620,21 @@ function Page(props) {
                                 </DataSection>
                             )}
                             <DataSection name="Licenses" marginTop>
-                                <Chip label="Drivers License" />
+                                {currentProfile.licenses &&
+                                    currentProfile.licenses.map((license) => (
+                                        <Chip
+                                            style={{ margin: '2px' }}
+                                            label={`${license}`}
+                                            onDelete={() => {
+                                                removeLicense(license)
+                                            }}
+                                        />
+                                    ))}
                             </DataSection>
                             <DataSection name="Vehicles" marginTop>
                                 {currentProfile.vehicles &&
                                     currentProfile.vehicles.map((vehicle) => (
                                         <Chip
-                                            icon={<DriveEtaIcon />}
                                             style={{ margin: '2px' }}
                                             label={`${vehicle.plate} - ${vehicle.model}`}
                                         />
@@ -617,14 +644,19 @@ function Page(props) {
                                 {currentProfile.housing &&
                                     currentProfile.housing.map((property) => (
                                         <Chip
-                                            icon={<HomeIcon />}
                                             style={{ margin: '2px' }}
                                             label={`${property.street}`}
                                         />
                                     ))}
                             </DataSection>
                             <DataSection name="Priors" marginTop>
-                                <Chip label="Drivers License" />
+                                {currentProfile.priors &&
+                                    currentProfile.priors.map((crime) => (
+                                        <Chip
+                                            style={{ margin: '2px' }}
+                                            label={`(${crime.count}) ${crime.name}`}
+                                        />
+                                    ))}
                             </DataSection>
                         </div>
                     </div>

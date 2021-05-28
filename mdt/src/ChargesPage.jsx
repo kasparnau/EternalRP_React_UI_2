@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import { useProfileStore, useChargesStore } from './store'
 import {
     Button,
-    Chip,
     FormControl,
     Input,
     InputLabel,
@@ -524,7 +523,7 @@ const SearchBar = ({ searchValue, setSearchValue }) => {
 }
 
 const Page = (props) => {
-    const { currentProfile } = useProfileStore()
+    const { setCurrentProfile, currentProfile } = useProfileStore()
 
     const { searchValue, setSearchValue } = useChargesStore()
 
@@ -590,11 +589,10 @@ const Page = (props) => {
             )
             .then((success) => {
                 if (success) {
-                    console.log('YAY')
-
                     // RESET STUFF
                     setCharges([])
-                    setReduction(0)
+                    setCurrentProfile(false)
+                    setReduction(0) // CHARGE REDUCTION AKA 10% / 25% / 50% ETC
                 } else {
                     console.log('RIP FAILED?')
                 }
@@ -716,43 +714,45 @@ const Page = (props) => {
                         </div>
                         <div
                             style={{
-                                backgroundColor: 'var(--dark)',
                                 marginTop: '8px',
-                                padding: '8px',
                                 height: '100%',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 flexDirection: 'column',
                             }}
                         >
-                            <div>
-                                <div>Current Charges ({charges.length})</div>
-                                <div
-                                    style={{
-                                        fontSize: '14px',
-                                        fontFamily: 'Roboto',
-                                        height: '350px',
-                                        overflowY: 'auto',
-                                    }}
-                                >
-                                    {charges.map((charge, index) => {
-                                        return (
-                                            <Option
-                                                {...charge}
-                                                style={{
-                                                    margin: '0px',
-                                                    marginTop: '4px',
-                                                    width: '100%',
-                                                }}
-                                                onClick={() => {
-                                                    removeCharge(
-                                                        charge.name,
-                                                        index
-                                                    )
-                                                }}
-                                            />
-                                        )
-                                    })}
+                            <div style={{ backgroundColor: 'var(--dark)' }}>
+                                <div style={{ padding: '8px' }}>
+                                    <div>
+                                        Current Charges ({charges.length})
+                                    </div>
+                                    <div
+                                        style={{
+                                            fontSize: '14px',
+                                            fontFamily: 'Roboto',
+                                            height: '350px',
+                                            overflowY: 'auto',
+                                        }}
+                                    >
+                                        {charges.map((charge, index) => {
+                                            return (
+                                                <Option
+                                                    {...charge}
+                                                    style={{
+                                                        margin: '0px',
+                                                        marginTop: '4px',
+                                                        width: '100%',
+                                                    }}
+                                                    onClick={() => {
+                                                        removeCharge(
+                                                            charge.name,
+                                                            index
+                                                        )
+                                                    }}
+                                                />
+                                            )
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                             <div>
