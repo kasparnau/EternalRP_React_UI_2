@@ -329,6 +329,7 @@ function Page(props) {
     React.useEffect(() => {
         searchBarDebounceId.current = searchBarDebounceId.current + 1
         let lastId = searchBarDebounceId.current
+
         setTimeout(() => {
             if (
                 searchBarDebounceId.current === lastId &&
