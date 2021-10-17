@@ -66,7 +66,7 @@ const darkTheme = createMuiTheme({
     },
 })
 
-const Menus = ['Dashboard', 'Profiles', 'Charges', 'Vehicles']
+const Menus = ['Dashboard', 'Profiilid', 'Süüdistused', 'Sõidukid']
 
 function App() {
     const [canShow, updateShow] = useState(!IS_PROD)
@@ -165,7 +165,7 @@ function App() {
                                         </PageAnimateWrapper>
                                     )}
 
-                                    {currentPage === 'Profiles' && (
+                                    {currentPage === 'Profiilid' && (
                                         <PageAnimateWrapper>
                                             <ProfilesPage
                                                 doNuiAction={doNuiAction}
@@ -174,7 +174,7 @@ function App() {
                                         </PageAnimateWrapper>
                                     )}
 
-                                    {currentPage === 'Charges' && (
+                                    {currentPage === 'Süüdistused' && (
                                         <PageAnimateWrapper>
                                             <ChargesPage
                                                 doNuiAction={doNuiAction}
@@ -183,7 +183,7 @@ function App() {
                                         </PageAnimateWrapper>
                                     )}
 
-                                    {currentPage === 'Vehicles' && (
+                                    {currentPage === 'Sõidukid' && (
                                         <PageAnimateWrapper>
                                             <VehiclesPage
                                                 doNuiAction={doNuiAction}

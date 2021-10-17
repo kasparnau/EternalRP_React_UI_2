@@ -20,104 +20,104 @@ const moneyFormatter = new Intl.NumberFormat('en-US', {
 const ChargeOptions = {
     OffensesAgainstPersons: [
         {
-            name: 'Brandishing of a Firearm',
+            name: 'Tulirelvaga Vehkimine',
             jail: 7,
             fine: 525,
             color: 1,
         },
 
         {
-            name: 'Assault & Battery',
+            name: 'Ründamine & Löömine',
             jail: 11,
             fine: 825,
             color: 1,
         },
         {
-            name: 'Unlawful Imprisonment',
+            name: 'Ebaseaduslikult Vangistamine',
             jail: 11,
             fine: 825,
             color: 1,
         },
         {
-            name: 'Reckless Endangerment',
+            name: 'Hoolimatu Ohustamine',
             jail: 11,
             fine: 825,
             color: 1,
         },
         {
-            name: 'Criminal Threats',
+            name: 'Kriminaalne Ähvardamine',
             jail: 14,
             fine: 1050,
             color: 1,
         },
         {
-            name: 'Kidnapping',
+            name: 'Inimröövimine',
             jail: 15,
             fine: 1050,
             color: 2,
         },
         {
-            name: 'Kidnapping a Government Employee',
+            name: 'Riigiametniku Inimröövimine',
             jail: 30,
             fine: 3500,
             color: 2,
         },
         {
-            name: 'Assault with a Deadly Weapon',
+            name: 'Rünnak Surmava Relvaga',
             jail: 21,
             fine: 1575,
             color: 2,
         },
         {
-            name: 'Attempted 2nd Degree Murder',
+            name: 'Teise Astme Mõrva Katse',
             jail: 25,
             fine: 1875,
             color: 2,
         },
         {
-            name: '2nd Degree Murder',
+            name: 'Teise Astme Mõrv',
             jail: 300,
             fine: 22500,
             color: 2,
         },
         {
-            name: 'Attempted 1st Degree Murder',
+            name: 'Esimese Astme Mõrva Katse',
             jail: 35,
             fine: 2625,
             color: 2,
         },
         {
-            name: 'Attempted Murder of a Government Employee',
+            name: 'Riigiametniku Mõrva Katse',
             jail: 45,
             fine: 3375,
             color: 2,
         },
         {
-            name: 'Gang Related Shooting',
+            name: 'Gangi Seotud Tulistamine',
             jail: 75,
             fine: 500,
             color: 2,
         },
         {
-            name: 'Manslaughter',
+            name: 'Ettekavatsemata Tapmine',
             jail: 150,
             fine: 11250,
             color: 3,
         },
         {
-            name: '1st Degree Murder',
+            name: 'Esimese Astme Mõrv',
             jail: 450,
             fine: 33500,
             color: 3,
         },
         {
-            name: 'Murder of a Government Employee',
+            name: 'Riigiametniku Mõrv',
             jail: 600,
             fine: 45850,
             color: 3,
         },
         {
-            name: 'Serial Assaults and Killings',
+            name: 'Sarirünnakud ja Tapmised',
             jail: 99999,
             fine: 0,
             color: 3,
@@ -125,56 +125,56 @@ const ChargeOptions = {
     ],
     OffensesInvolvingVehicles: [
         {
-            name: 'Negligent Driving',
+            name: 'Hooletu Juhtimine',
             jail: 0,
             fine: 525,
             color: 1,
         },
         {
-            name: 'Joyriding',
+            name: 'Lõbusoit',
             jail: 5,
             fine: 800,
             color: 1,
         },
 
         {
-            name: 'Speeding 1-25 km/h',
+            name: 'Kiiruseületamine 1-25 km/h',
             jail: 0,
             fine: 140,
             color: 1,
         },
         {
-            name: 'Speeding 25-40 km/h',
+            name: 'Kiiruseületamine 25-40 km/h',
             jail: 0,
             fine: 280,
             color: 1,
         },
         {
-            name: 'Speeding 40-60 km/h',
+            name: 'Kiiruseületamine 40-60 km/h',
             jail: 0,
             fine: 500,
             color: 1,
         },
         {
-            name: 'Speeding 60-100 km/h',
+            name: 'Kiiruseületamine 60-100 km/h',
             jail: 0,
             fine: 950,
             color: 1,
         },
         {
-            name: 'Speeding 100+ km/h',
+            name: 'Kiiruseületamine 100+ km/h',
             jail: 7,
             fine: 1250,
             color: 2,
         },
         {
-            name: 'Vehicular Assault',
+            name: 'Sõidukiga Rünnak',
             jail: 21,
             fine: 1575,
             color: 2,
         },
         {
-            name: 'Reckless Driving',
+            name: 'Hoolimatu Juhtimine',
             jail: 12,
             fine: 900,
             color: 2,
@@ -182,26 +182,26 @@ const ChargeOptions = {
     ],
     GeneralTrafficViolations: [
         {
-            name: 'Failure to Obey Traffic Control Devices',
+            name: 'Liikusmärkide Eiramine',
             jail: 0,
             fine: 150,
             color: 1,
         },
         {
-            name: 'Improper Window Tint',
+            name: 'Sobimatu Akna Toon',
             jail: 0,
             fine: 250,
             color: 1,
         },
 
         {
-            name: 'Driving on the Wrong Side of the Road',
+            name: 'Valel Pool Teed Sõitmine',
             jail: 0,
             fine: 300,
             color: 1,
         },
         {
-            name: 'Unauthorized Parking',
+            name: 'Ebaseaduslik Parkimine',
             jail: 0,
             fine: 500,
             color: 1,
@@ -209,43 +209,43 @@ const ChargeOptions = {
     ],
     OffensesInvolvingTheft: [
         {
-            name: 'Petty Theft',
+            name: 'Pisivargus',
             jail: 0,
             fine: 250,
             color: 1,
         },
         {
-            name: 'Grand Theft Auto',
+            name: 'Autovargus',
             jail: 5,
             fine: 375,
             color: 1,
         },
         {
-            name: 'Receiving Stolen Goods',
+            name: 'Varastatud Kauba Vastuvõtmine',
             jail: 12,
             fine: 1300,
             color: 2,
         },
         {
-            name: 'Burglary',
+            name: 'Sissemurdmine',
             jail: 13,
             fine: 1450,
             color: 2,
         },
         {
-            name: 'Sale of Stolen Goods',
+            name: 'Varastatud Kaupade Müümine',
             jail: 24,
             fine: 2600,
             color: 2,
         },
         {
-            name: 'Robbery',
+            name: 'Röövimine',
             jail: 25,
             fine: 3000,
             color: 2,
         },
         {
-            name: 'First Degree Robbery',
+            name: 'Esimese Astme Röövimine',
             jail: 35,
             fine: 3550,
             color: 3,
@@ -265,7 +265,7 @@ const ChargeOptions = {
             color: 2,
         },
         {
-            name: 'Arson',
+            name: 'Süütamine',
             jail: 21,
             fine: 1575,
             color: 2,
@@ -273,31 +273,31 @@ const ChargeOptions = {
     ],
     OffensesInvolvingFraud: [
         {
-            name: 'Fraud',
+            name: 'Pettus',
             jail: 15,
             fine: 1000,
             color: 2,
         },
         {
-            name: 'Extortion',
+            name: 'Väljapressimine',
             jail: 15,
             fine: 1000,
             color: 2,
         },
         {
-            name: 'Identity Theft',
+            name: 'Identiteedi Vargus',
             jail: 15,
             fine: 1500,
             color: 2,
         },
         {
-            name: 'Bribery',
+            name: 'Altkäemaks',
             jail: 20,
             fine: 2000,
             color: 2,
         },
         {
-            name: 'Money Laundering',
+            name: 'Rahapesu',
             jail: 30,
             fine: 2900,
             color: 2,
@@ -305,31 +305,31 @@ const ChargeOptions = {
     ],
     OffensesAgainstPublicSafety: [
         {
-            name: 'Disturbing the peace',
+            name: 'Rahu Häirimine',
             jail: 0,
             fine: 375,
             color: 1,
         },
         {
-            name: 'Disorderly Conduct',
+            name: 'Häiriv Käitumine',
             jail: 0,
             fine: 500,
             color: 1,
         },
         {
-            name: 'Resisting Arrest',
+            name: 'Vahistamisele Vastupanu',
             jail: 5,
             fine: 700,
             color: 1,
         },
         {
-            name: 'Criminal Possession of a Taser',
+            name: 'Taseri Kriminaalne Omamine',
             jail: 15,
             fine: 1575,
             color: 2,
         },
         {
-            name: 'Criminal Possession of a Firearm',
+            name: 'Tulirelva Kriminaalne Omamine',
             jail: 20,
             fine: 2150,
             color: 2,
@@ -343,25 +343,25 @@ const ChargeOptions = {
     ],
     OffensesAgainstPublicOrder: [
         {
-            name: 'Disobeying a Peace Officer',
+            name: 'Riigiametniku Sõnakuulmatus',
             jail: 7,
             fine: 500,
             color: 1,
         },
         {
-            name: 'Harrassment',
+            name: 'Ahistamine',
             jail: 7,
             fine: 600,
             color: 1,
         },
         {
-            name: 'Animal Cruelty',
+            name: 'Loomade Julmus',
             jail: 7,
             fine: 600,
             color: 1,
         },
         {
-            name: 'Obstruction of Justice',
+            name: 'Õigluse Takistamine',
             jail: 12,
             fine: 990,
             color: 1,
@@ -369,31 +369,25 @@ const ChargeOptions = {
     ],
     OffensesAgainstPublicHealth: [
         {
-            name: 'Prostitution',
+            name: 'Prostitutsioon',
             jail: 3,
             fine: 350,
             color: 1,
         },
         {
-            name: 'Public Indecency',
+            name: 'Avalik Ebasündsus',
             jail: 5,
             fine: 500,
             color: 1,
         },
         {
-            name: 'Possession of Controlled Dangerous Substances',
+            name: 'Illegaalsete Ainete Omamine',
             jail: 7,
             fine: 750,
             color: 1,
         },
         {
-            name: 'Desecration of a Human Corpse',
-            jail: 18,
-            fine: 1500,
-            color: 2,
-        },
-        {
-            name: 'Sale of Drugs',
+            name: 'Narkootikumide Müümine',
             jail: 25,
             fine: 2300,
             color: 2,
@@ -461,7 +455,7 @@ const Option = (props) => {
                                 marginTop: '6px',
                             }}
                         >
-                            <div>{jail} month(s)</div>
+                            <div>{jail} kuu(d)</div>
                             <div>{moneyFormatter.format(fine)}</div>
                         </div>
                     </div>
@@ -508,7 +502,7 @@ const SearchBar = ({ searchValue, setSearchValue }) => {
         <div>
             <FormControl fullWidth>
                 <InputLabel htmlFor="standard-adornment-amount">
-                    Charge
+                    Otsi
                 </InputLabel>
                 <Input
                     style={{ color: 'white' }}
@@ -620,7 +614,7 @@ const Page = (props) => {
                                 alignItems: 'center',
                             }}
                         >
-                            <div>Add Charges</div>
+                            <div>Lisa Süüdistusi</div>
                             <div>
                                 <SearchBar
                                     searchValue={searchValue}
@@ -639,14 +633,14 @@ const Page = (props) => {
                             }}
                         >
                             <Category
-                                name="Offenses Against Persons"
+                                name="Kuriteod Isikute Vastu"
                                 options={ChargeOptions.OffensesAgainstPersons}
                                 searchValue={searchValue}
                                 addCharge={addCharge}
                             />
 
                             <Category
-                                name="Offenses Involving Vehicles"
+                                name="Kuriteod Seotud Sõidukitega"
                                 options={
                                     ChargeOptions.OffensesInvolvingVehicles
                                 }
@@ -654,25 +648,25 @@ const Page = (props) => {
                                 addCharge={addCharge}
                             />
                             <Category
-                                name="General Traffic Violations/Citations"
+                                name="Üldised Liiklusrikkumised"
                                 options={ChargeOptions.GeneralTrafficViolations}
                                 searchValue={searchValue}
                                 addCharge={addCharge}
                             />
                             <Category
-                                name="Offenses Involving Theft"
+                                name="Kuriteod Seotud Vargusega"
                                 options={ChargeOptions.OffensesInvolvingTheft}
                                 searchValue={searchValue}
                                 addCharge={addCharge}
                             />
                             <Category
-                                name="Offenses Involving Fraud"
+                                name="Kuriteod Seotud Pettustega"
                                 options={ChargeOptions.OffensesInvolvingFraud}
                                 searchValue={searchValue}
                                 addCharge={addCharge}
                             />
                             <Category
-                                name="Offenses Against Public Safety"
+                                name="Kuriteod Seotud Avaliku Turvalisusega"
                                 options={
                                     ChargeOptions.OffensesAgainstPublicSafety
                                 }
@@ -680,7 +674,7 @@ const Page = (props) => {
                                 addCharge={addCharge}
                             />
                             <Category
-                                name="Offenses Against Public Order"
+                                name="Kuriteod Avaliku Korra Vastu"
                                 options={
                                     ChargeOptions.OffensesAgainstPublicOrder
                                 }
@@ -688,7 +682,7 @@ const Page = (props) => {
                                 addCharge={addCharge}
                             />
                             <Category
-                                name="Offenses Against Public Health"
+                                name="Kuriteod Rahvatervise Vastu"
                                 options={
                                     ChargeOptions.OffensesAgainstPublicHealth
                                 }
@@ -724,7 +718,7 @@ const Page = (props) => {
                             <div style={{ backgroundColor: 'var(--dark)' }}>
                                 <div style={{ padding: '8px' }}>
                                     <div>
-                                        Current Charges ({charges.length})
+                                        Praegused Süüdistused ({charges.length})
                                     </div>
                                     <div
                                         style={{
@@ -758,7 +752,7 @@ const Page = (props) => {
                             <div>
                                 {charges.length > 0 && (
                                     <div>
-                                        <div>Reductions</div>
+                                        <div>Vähendused</div>
                                         <Select
                                             style={{ width: '100%' }}
                                             labelId="demo-simple-select-placeholder-label-label"
@@ -784,7 +778,7 @@ const Page = (props) => {
                                         </Select>
 
                                         <div style={{ marginTop: '8px' }}>
-                                            Final
+                                            Total
                                         </div>
                                         <div>{finalString}</div>
                                         <Button
@@ -795,7 +789,7 @@ const Page = (props) => {
                                             }}
                                             onClick={chargePlayer}
                                         >
-                                            Charge
+                                            Karista
                                         </Button>
                                     </div>
                                 )}
@@ -813,7 +807,7 @@ const Page = (props) => {
                         justifyContent: 'center',
                     }}
                 >
-                    No Profile Selected (Select one from the Profiles tab)
+                    Profiili Pole Valitud (Vali Profiilid lehelt)
                 </div>
             )}
         </div>

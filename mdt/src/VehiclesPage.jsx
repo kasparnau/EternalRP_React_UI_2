@@ -31,7 +31,7 @@ function Searchbar(props) {
             <div style={{ maxWidth: '60%' }}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="standard-adornment-amount">
-                        Plate
+                        Numbrimärk
                     </InputLabel>
                     <Input
                         style={{ color: 'white' }}
@@ -141,7 +141,7 @@ function Page(props) {
                 }}
             >
                 <Searchbar
-                    name={'Vehicles'}
+                    name={'Sõidukid'}
                     value={searchBarValue}
                     handleChange={(event) => {
                         setSearchBarValue(event.target.value)
@@ -171,7 +171,7 @@ function Page(props) {
                             justifyContent: 'center',
                         }}
                     >
-                        No Vehicle Selected
+                        Sõidukit Pole Valitud
                     </div>
                 )}
                 {currentVehicle && (
@@ -184,7 +184,7 @@ function Page(props) {
                         }}
                     >
                         <div>
-                            Vehicle Owner:{' '}
+                            Sõiduki Omanik:{' '}
                             <Button
                                 style={{ backgroundColor: 'var(--dark)' }}
                                 onClick={() => {
@@ -197,16 +197,16 @@ function Page(props) {
                                 {currentVehicle.owner_name}
                             </Button>
                         </div>
-                        <div>Plate: {currentVehicle.plate}</div>
+                        <div>Numbrimärk: {currentVehicle.plate}</div>
                         <div style={{ marginTop: '8px' }}>
-                            Model: {currentVehicle.model}
+                            Mudel: {currentVehicle.model}
                         </div>
                         <div style={{ marginTop: '8px' }}>
                             VIN: {currentVehicle.vin}
                         </div>
 
                         <div style={{ marginTop: '8px' }}>
-                            First Registered:{' '}
+                            Registreeritud:{' '}
                             {new Date(
                                 currentVehicle.created_at * 1000
                             ).toLocaleDateString('en-US')}

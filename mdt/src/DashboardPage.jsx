@@ -13,6 +13,9 @@ import {
 
 import moment from 'moment'
 
+import formatDistance from 'date-fns/formatDistance'
+import { et } from 'date-fns/locale'
+
 function Searchbar(props) {
     return (
         <div
@@ -55,7 +58,11 @@ function WarrantDiv(props) {
             <div>{warrant.character_name}</div>
             <div style={{ marginTop: '8px' }}>{warrant.reason}</div>
             <Divider />
-            {moment(warrant.timestamp * 1000).fromNow()}
+            {formatDistance(new Date(warrant.timestamp * 1000), new Date(), {
+                includeSeconds: true,
+                locale: et,
+            })}{' '}
+            tagasi
         </div>
     )
 }
@@ -67,7 +74,11 @@ function BulletinDiv(props) {
             <div>{bulletin.title}</div>
             <div style={{ marginTop: '8px' }}>{bulletin.description}</div>
             <Divider />
-            {moment(bulletin.timestamp * 1000).fromNow()}
+            {formatDistance(new Date(bulletin.timestamp * 1000), new Date(), {
+                includeSeconds: true,
+                locale: et,
+            })}{' '}
+            tagasi
         </div>
     )
 }
@@ -101,20 +112,13 @@ function Page(props) {
                             timestamp: 1620665732,
                             character_id: 3,
                             character_name: 'Jean Pual',
-                            reason: 'Really nigga? 5 Cops for this?',
-                        },
-                        {
-                            id: 2,
-                            timestamp: 1620665792,
-                            character_id: 4,
-                            character_name: 'Indrek Lindsalu',
-                            reason: 'Ei ole ikka veel moelnud serverile nime valja  >:(>?(::>:(>(:(:>Ei ole ikka veel moelnud serverile nime valja  >:(>?(::>:(>(:(:>',
+                            reason: 'Really? 5 Cops for this?',
                         },
                     ],
                     bulletins: [
                         {
                             id: 1,
-                            timestamp: 1608832019,
+                            timestamp: 1634485964,
                             title: 'Tazerid',
                             description:
                                 'inimeste autodest tazeriga vÃ¤lja laskmine = ban',
@@ -140,7 +144,7 @@ function Page(props) {
                 style={{ width: '50%', alignItems: 'center' }}
             >
                 <Searchbar
-                    name={'Warrants'}
+                    name={'Tagaotsitavad'}
                     value={searchBarValue}
                     handleChange={(event) => {
                         setSearchBarValue(event.target.value)
@@ -160,7 +164,7 @@ function Page(props) {
             </div>
             <div className="PageSectionPadding" />
             <div className="PageSectionContainer" style={{ width: '50%' }}>
-                Bulletin Board
+                Teadetetahvel
                 <div className="ListItemsContainer">
                     {bulletins.map((bulletin) => (
                         <BulletinDiv bulletin={bulletin} />

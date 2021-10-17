@@ -137,7 +137,7 @@ function Searchbar(props) {
             <div style={{ maxWidth: '60%' }}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="standard-adornment-amount">
-                        Name
+                        Nimi
                     </InputLabel>
                     <Input
                         style={{ color: 'white' }}
@@ -361,6 +361,7 @@ function Page(props) {
     }, [searchBarValue])
 
     const removeLicense = (license) => {
+        console.log('Delete: ' + license)
         props
             .doNuiAction(
                 'removeLicense',
@@ -371,7 +372,7 @@ function Page(props) {
             .then((success) => {
                 if (success) {
                     const newLicenses = currentProfile.licenses.filter(
-                        (name) => name !== license
+                        (aLicense) => aLicense.id !== license
                     )
                     setCurrentProfile({
                         ...currentProfile,
@@ -393,7 +394,7 @@ function Page(props) {
                 }}
             >
                 <Searchbar
-                    name={'Profiles'}
+                    name={'Profiilid'}
                     value={searchBarValue}
                     handleChange={(event) => {
                         setSearchBarValue(event.target.value)
@@ -422,7 +423,7 @@ function Page(props) {
                             justifyContent: 'center',
                         }}
                     >
-                        No Profile Selected
+                        Profiili Pole Valitud
                     </div>
                 )}
                 {currentProfile && (
@@ -449,7 +450,7 @@ function Page(props) {
                                     justifyContent: 'flex-start',
                                 }}
                             >
-                                <div>Profile</div>
+                                <div>Profiil</div>
                                 <div
                                     style={{
                                         width: '100%',
@@ -466,7 +467,7 @@ function Page(props) {
                                                 marginRight: '8px',
                                             }}
                                         >
-                                            BILLS
+                                            TRAHVID
                                         </Button>
                                         {!!!currentProfile.warrant && (
                                             <Button
@@ -477,7 +478,7 @@ function Page(props) {
                                                 }}
                                                 onClick={openWantedModal}
                                             >
-                                                MAKE WANTED
+                                                TEE TAGAOTSITAVAKS
                                             </Button>
                                         )}
                                         {!!currentProfile.warrant && (
@@ -489,7 +490,7 @@ function Page(props) {
                                                 }}
                                                 onClick={removeWarrant}
                                             >
-                                                REMOVE WARRANT
+                                                EEMALDA TAGAOTSITAVUS
                                             </Button>
                                         )}
                                         <Button
@@ -498,7 +499,7 @@ function Page(props) {
                                             }}
                                             onClick={saveProfile}
                                         >
-                                            SAVE
+                                            SALVESTA
                                         </Button>
                                     </div>
                                 </div>
@@ -525,22 +526,22 @@ function Page(props) {
                                     }}
                                 >
                                     <div>
-                                        Name: {currentProfile.character_name}
+                                        Nimi: {currentProfile.character_name}
                                     </div>
-                                    <div>Born: {currentProfile.born}</div>
+                                    <div>Sündinud: {currentProfile.born}</div>
                                     <div>
-                                        Citizen ID:{' '}
+                                        Kodaniku ID:{' '}
                                         {currentProfile.character_id}
                                     </div>
                                     <div>
                                         {currentProfile.faction_name && (
                                             <div>
-                                                Faction:{' '}
+                                                Grupeering:{' '}
                                                 {currentProfile.faction_name}
                                             </div>
                                         )}
                                         {!currentProfile.faction_name && (
-                                            <div>No Faction</div>
+                                            <div>Pole Grupeeringut</div>
                                         )}
                                     </div>
                                     <div
@@ -551,7 +552,8 @@ function Page(props) {
                                     >
                                         <FormControl fullWidth>
                                             <InputLabel htmlFor="standard-adornment-amount">
-                                                Profile Image URL
+                                                Profiilipildi URL (näiteks
+                                                mugshot)
                                             </InputLabel>
                                             <Input
                                                 style={{ color: 'white' }}
@@ -598,7 +600,7 @@ function Page(props) {
                         >
                             {!!currentProfile.warrant && (
                                 <DataSection
-                                    name="PERSON IS WANTED"
+                                    name="ISIK ON TAGAOTSITAV"
                                     color="red"
                                 >
                                     <div
@@ -620,19 +622,22 @@ function Page(props) {
                                     </div>
                                 </DataSection>
                             )}
-                            <DataSection name="Licenses" marginTop>
+                            <DataSection name="Load" marginTop>
                                 {currentProfile.licenses &&
-                                    currentProfile.licenses.map((license) => (
-                                        <Chip
-                                            style={{ margin: '2px' }}
-                                            label={`${license}`}
-                                            onDelete={() => {
-                                                removeLicense(license)
-                                            }}
-                                        />
-                                    ))}
+                                    currentProfile.licenses.map((license) => {
+                                        console.log(JSON.stringify(license))
+                                        return (
+                                            <Chip
+                                                style={{ margin: '2px' }}
+                                                label={`${license.license_name}`}
+                                                onDelete={() => {
+                                                    removeLicense(license.id)
+                                                }}
+                                            />
+                                        )
+                                    })}
                             </DataSection>
-                            <DataSection name="Vehicles" marginTop>
+                            <DataSection name="Sõidukid" marginTop>
                                 {currentProfile.vehicles &&
                                     currentProfile.vehicles.map((vehicle) => (
                                         <Chip
@@ -641,7 +646,7 @@ function Page(props) {
                                         />
                                     ))}
                             </DataSection>
-                            <DataSection name="Housing" marginTop>
+                            <DataSection name="Kinnisvara" marginTop>
                                 {currentProfile.housing &&
                                     currentProfile.housing.map((property) => (
                                         <Chip
@@ -650,7 +655,7 @@ function Page(props) {
                                         />
                                     ))}
                             </DataSection>
-                            <DataSection name="Priors" marginTop>
+                            <DataSection name="Eelnevad Karistused" marginTop>
                                 {currentProfile.priors &&
                                     currentProfile.priors.map((crime) => (
                                         <Chip

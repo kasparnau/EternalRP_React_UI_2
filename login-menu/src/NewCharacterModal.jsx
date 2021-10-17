@@ -63,7 +63,7 @@ function NewCharacterModal(props) {
             setValue("gender", "male");
           }}
         >
-          MALE
+          MEES
         </Button>
         <Button
           style={{
@@ -77,7 +77,7 @@ function NewCharacterModal(props) {
             setValue("gender", "female");
           }}
         >
-          FEMALE
+          NAINE
         </Button>
       </div>
       <div
@@ -93,7 +93,7 @@ function NewCharacterModal(props) {
           variant="filled"
           className={classes.root}
         >
-          <InputLabel htmlFor="filled-adornment-amount">First Name</InputLabel>
+          <InputLabel htmlFor="filled-adornment-amount">Eesnimi</InputLabel>
           <FilledInput
             id="filled-adornment-amount"
             value={values.first_name}
@@ -117,7 +117,7 @@ function NewCharacterModal(props) {
           variant="filled"
           className={classes.root}
         >
-          <InputLabel htmlFor="filled-adornment-amount">Last Name</InputLabel>
+          <InputLabel htmlFor="filled-adornment-amount">Sugunimi</InputLabel>
           <FilledInput
             id="filled-adornment-amount"
             value={values.last_name}
@@ -139,7 +139,7 @@ function NewCharacterModal(props) {
         <TextField
           style={{ width: "100%" }}
           id="date"
-          label="Birthday"
+          label="Sünnipäev"
           type="date"
           defaultValue="2000-01-01"
           value={values.born}
@@ -152,7 +152,9 @@ function NewCharacterModal(props) {
           }}
         />
       </div>
-
+      {props.createError && (
+        <div style={{ color: "#D17D00" }}>{props.createError}</div>
+      )}
       {/* FINALIZE: */}
       <div
         style={{
@@ -170,7 +172,7 @@ function NewCharacterModal(props) {
           }}
           onClick={closeModal}
         >
-          CANCEL
+          TÜHISTA
         </Button>
         <Button
           onClick={props.handleCreate}
@@ -181,7 +183,7 @@ function NewCharacterModal(props) {
             marginLeft: "5px",
           }}
         >
-          CREATE
+          LOO KARAKTER
         </Button>
       </div>
     </div>

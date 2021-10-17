@@ -31,6 +31,7 @@ function App() {
 
   const [newModalOpen, openNewModal] = React.useState(false);
   const [createButtonDisabled, setButtonDisabled] = React.useState(true);
+  const [createError, setCreateError] = React.useState("");
 
   const [values, setValues] = React.useState({
     first_name: "",
@@ -131,8 +132,33 @@ function App() {
     return c1 && c2 && c3 && c4;
   }
 
+  function getCreateError() {
+    let c1 = values.first_name.length >= 3 && values.first_name.length <= 25;
+    let c2 = values.last_name.length >= 3 && values.last_name.length <= 25;
+    let c3 = values.gender === "female" || values.gender === "male";
+    let c4 =
+      new Date(values.born) < new Date("2000-01-02") &&
+      new Date(values.born) > new Date("1899-12-31");
+
+    if (!c3) {
+      return "Vali sugupool!";
+    }
+    if (!c1) {
+      return "Vali eesnimi!";
+    }
+    if (!c2) {
+      return "Vali sugunimi!";
+    }
+    if (!c4) {
+      return "Vali sünnipäev. (Peab olema vanem kui 2000)";
+    }
+
+    return false;
+  }
+
   React.useEffect(() => {
     setButtonDisabled(!canCreate());
+    setCreateError(getCreateError());
   }, [values]);
 
   function handleCreate() {
@@ -172,7 +198,7 @@ function App() {
               <React.Fragment>
                 <div className="Top">
                   <div style={{ padding: "1rem" }}>
-                    Liitu meie discordiga @ https://discord.io/pask :)
+                    Liitu meie discordiga @ https://discord.io/eternalinvite :)
                   </div>
                 </div>
                 <div className="Characters">
@@ -192,7 +218,7 @@ function App() {
                           </div>
                           <div className="CharacterSlotMiddle">
                             <SlotText>
-                              Citizen ID: {character.character_id}
+                              Kodaniku ID: {character.character_id}
                             </SlotText>
                             {character.faction && (
                               <SlotText>
@@ -201,17 +227,17 @@ function App() {
                               </SlotText>
                             )}
                             {!character.faction && (
-                              <SlotText>No Faction</SlotText>
+                              <SlotText>Pole Grupeeringut</SlotText>
                             )}
                             <SlotText>
-                              {character.gender === 0 ? "Male" : "Female"}
+                              {character.gender === 0 ? "Mees" : "Naine"}
                             </SlotText>
                             <SlotText>{character.date_of_birth}</SlotText>
                             {character.dead && (
-                              <SlotText color="red">IN HOSPITAL</SlotText>
+                              <SlotText color="red">HAIGLAS</SlotText>
                             )}
                             {character.prison && (
-                              <SlotText color="red">IN PRISON</SlotText>
+                              <SlotText color="red">VANGLAS</SlotText>
                             )}
                           </div>
                           <div className="CharacterSlotBottom">
@@ -226,7 +252,7 @@ function App() {
                                 selectCharacter(character.character_id);
                               }}
                             >
-                              PLAY
+                              MÄNGI
                             </Button>
                           </div>
                         </div>
@@ -244,7 +270,7 @@ function App() {
                         color: "white",
                       }}
                     >
-                      You don't have any characters.
+                      Sul pole ühtegi karakteri.
                     </div>
                   )}
                 </div>
@@ -258,7 +284,7 @@ function App() {
                       openNewModal(true);
                     }}
                   >
-                    CREATE NEW
+                    UUS KARAKTER
                   </Button>
                 </div>
                 {newModalOpen && (
@@ -283,6 +309,7 @@ function App() {
                         <NewCharacterModal
                           handleCreate={handleCreate}
                           createButtonDisabled={createButtonDisabled}
+                          createError={createError}
                           closeModal={() => {
                             openNewModal(false);
                           }}
