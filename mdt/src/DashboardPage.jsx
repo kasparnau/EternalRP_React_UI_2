@@ -4,15 +4,6 @@ import React, { useState } from 'react'
 import { useProfileStore } from './store'
 import { useDashboardStore } from './store'
 
-import {
-    FormControl,
-    Input,
-    InputAdornment,
-    InputLabel,
-} from '@material-ui/core'
-
-import moment from 'moment'
-
 import formatDistance from 'date-fns/formatDistance'
 import { et } from 'date-fns/locale'
 
@@ -152,13 +143,7 @@ function Page(props) {
                 />
                 <div className="ListItemsContainer">
                     {warrants.map((warrant) => (
-                        <WarrantDiv
-                            warrant={warrant}
-                            onClick={() => {
-                                props.setPage('Profiles')
-                                changeCurrentCharacterId(warrant.character_id)
-                            }}
-                        />
+                        <WarrantDiv warrant={warrant} />
                     ))}
                 </div>
             </div>

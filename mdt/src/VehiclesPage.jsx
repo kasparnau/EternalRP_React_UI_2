@@ -115,7 +115,7 @@ function Page(props) {
         setTimeout(async () => {
             if (
                 searchBarDebounceId.current === lastId &&
-                searchBarValue.length >= 3
+                searchBarValue.length >= 1
             ) {
                 setVehicleResults(await getVehicleResults(searchBarValue))
             } else {

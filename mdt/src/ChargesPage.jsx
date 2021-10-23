@@ -168,7 +168,7 @@ const ChargeOptions = {
             color: 2,
         },
         {
-            name: 'Sõidukiga Rünnak',
+            name: 'Rünnak Sõidukiga',
             jail: 21,
             fine: 1575,
             color: 2,
@@ -311,13 +311,7 @@ const ChargeOptions = {
             color: 1,
         },
         {
-            name: 'Häiriv Käitumine',
-            jail: 0,
-            fine: 500,
-            color: 1,
-        },
-        {
-            name: 'Vahistamisele Vastupanu',
+            name: 'Vahistamisele Vastupanu Osutamine',
             jail: 5,
             fine: 700,
             color: 1,
@@ -466,8 +460,22 @@ const Option = (props) => {
 }
 
 const Category = ({ name, options, searchValue, addCharge }) => {
+    const [show, setShow] = React.useState(true)
+    React.useEffect(() => {
+        for (let i = 0; i < options.length; i++) {
+            if (
+                options[i].name
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase())
+            ) {
+                setShow(true)
+                return
+            }
+        }
+        setShow(false)
+    }, [searchValue])
     return (
-        <div style={{ margin: '8px' }}>
+        <div style={{ margin: '8px', display: show ? 'block' : 'none' }}>
             <div>{name}</div>
 
             <div
@@ -807,7 +815,7 @@ const Page = (props) => {
                         justifyContent: 'center',
                     }}
                 >
-                    Profiili Pole Valitud (Vali Profiilid lehelt)
+                    Profiili Pole Valitud (Vali Profiilide Lehelt)
                 </div>
             )}
         </div>

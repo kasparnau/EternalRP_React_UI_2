@@ -1,5 +1,12 @@
-import create from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { create, reset } from './zustandWrapper'
+const IS_PROD = process.env.NODE_ENV === 'production'
+
+let mainStore = (set) => ({
+    character: IS_PROD ? {} : debugCharacter,
+    setCharacter: (pCharacter) => set((state) => ({ character: pCharacter })),
+})
+
+export const useMainStore = create(mainStore)
 
 let profileStore = (set) => ({
     currentCharacterId: 0,
@@ -61,3 +68,7 @@ let chargesStore = (set) => ({
 })
 
 export const useChargesStore = create(chargesStore)
+
+export const resetState = () => {
+    reset()
+}

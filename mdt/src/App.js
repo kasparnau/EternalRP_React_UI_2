@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useMainStore, resetState } from './store'
 
 import Spinner from 'react-spinners/RotateLoader'
 import sendNUI from './sendNUI'
@@ -70,15 +71,20 @@ const Menus = ['Dashboard', 'Profiilid', 'Süüdistused', 'Sõidukid']
 
 function App() {
     const [canShow, updateShow] = useState(!IS_PROD)
-
     const [currentPage, setPage] = useState('Dashboard')
-
     const [loading, setLoading] = useState(false)
+    const { setCharacter } = useMainStore()
 
     React.useEffect(() => {
         window.addEventListener('message', (event) => {
             if (event.data.show !== undefined) {
                 updateShow(event.data.show)
+            }
+            if (event.data.character !== undefined) {
+                setCharacter(event.data.character)
+            }
+            if (event.data.resetData !== undefined) {
+                resetState()
             }
         })
 

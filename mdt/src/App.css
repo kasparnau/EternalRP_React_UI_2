@@ -133,14 +133,14 @@
     margin-top: 8px;
     margin-bottom: 8px;
     flex-direction: column;
-    background-color: hsla(218, 31%, 12%, 0.541);
+    background-color: hsl(218, 31%, 12%);
     font-size: 14px;
     border-radius: 4px;
 }
-
+/* 
 .ListItem:hover {
     background-color: hsl(218, 31%, 12%);
-}
+} */
 
 .ListItemButton {
     padding: 8px;

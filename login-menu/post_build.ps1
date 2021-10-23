@@ -1,0 +1,1 @@
+Copy-Item "./build/*" -Destination "C:\Users\Klicer\Documents\GitHub\EternalRP\server-data\resources\[local]\login-menu\build" -Recurse -force

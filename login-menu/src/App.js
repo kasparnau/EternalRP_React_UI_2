@@ -40,6 +40,8 @@ function App() {
     born: "2000-01-01",
   });
 
+  const [current, setCurrent] = React.useState(undefined);
+
   function setValue(name, value) {
     if (name == "first_name" || name == "last_name") {
       value = value.replace(/\s+/g, "");
@@ -50,52 +52,53 @@ function App() {
   }
 
   function reloadCharacters() {
+    setCurrent(undefined);
     setLoading(true);
     doEvent(
       "fetchCharacters",
       [],
       [
-        // {
-        //   character_id: 3,
-        //   character_name: "Pede Homo",
-        //   gender: 0,
-        //   date_of_birth: "1999-01-01",
-        //   faction: {
-        //     group: {
-        //       faction_name: "LSPD",
-        //     },
-        //     member: {
-        //       rank_name: "Chief of Police",
-        //       rank_level: 100,
-        //     },
-        //   },
-        //   job: "",
-        //   phone_number: 396543813,
-        //   dead: null,
-        //   prison: null,
-        // },
-        // {
-        //   character_id: 4,
-        //   character_name: "Barack Obama",
-        //   gender: 0,
-        //   date_of_birth: "1999-01-01",
-        //   faction: null,
-        //   job: "",
-        //   phone_number: 133623245,
-        //   dead: null,
-        //   prison: true,
-        // },
-        // {
-        //   character_id: 5,
-        //   character_name: "Uuga Buuga",
-        //   gender: 0,
-        //   date_of_birth: "1992-06-31",
-        //   faction: null,
-        //   job: "",
-        //   phone_number: 133623245,
-        //   dead: null,
-        //   prison: null,
-        // },
+        {
+          character_id: 3,
+          character_name: "Pede Homo",
+          gender: 0,
+          date_of_birth: "1999-01-01",
+          faction: {
+            group: {
+              faction_name: "LSPD",
+            },
+            member: {
+              rank_name: "Chief of Police",
+              rank_level: 100,
+            },
+          },
+          job: "",
+          phone_number: 396543813,
+          dead: null,
+          prison: null,
+        },
+        {
+          character_id: 4,
+          character_name: "Barack Obama",
+          gender: 0,
+          date_of_birth: "1999-01-01",
+          faction: null,
+          job: "",
+          phone_number: 133623245,
+          dead: null,
+          prison: true,
+        },
+        {
+          character_id: 5,
+          character_name: "Uuga Buuga",
+          gender: 0,
+          date_of_birth: "1992-06-31",
+          faction: null,
+          job: "",
+          phone_number: 133623245,
+          dead: null,
+          prison: null,
+        },
       ]
     ).then((result) => {
       setCharacters(result);
@@ -107,6 +110,12 @@ function App() {
     window.addEventListener("message", (event) => {
       if (event.data.show !== undefined) {
         updateVisible(event.data.show);
+      }
+      if (event.data.setCurrent !== undefined) {
+        setCurrent(event.data.setCurrent);
+      }
+      if (event.data.firstTime !== undefined) {
+        openNewModal(true);
       }
     });
   }, []);
@@ -179,15 +188,26 @@ function App() {
     }
   }
 
-  function selectCharacter(citizen_id) {
+  function selectCharacter() {
     setLoading(true);
-    doEvent("selectCharacter", { citizen_id }, []);
+    doEvent("selectCharacter", { current }, []);
   }
+
+  const handleClick = (e) => {
+    doEvent(
+      "click",
+      {
+        x: e.clientX,
+        y: e.clientY,
+      },
+      true
+    );
+  };
 
   return (
     <div>
       {visible && (
-        <div className="App">
+        <div className="App" onMouseDown={handleClick}>
           <div className="Main">
             {loading && (
               <div className="Spinner">
@@ -196,11 +216,51 @@ function App() {
             )}
             {!loading && (
               <React.Fragment>
-                <div className="Top">
-                  <div style={{ padding: "1rem" }}>
-                    Liitu meie discordiga @ https://discord.io/eternalinvite :)
+                <div
+                  className="Top"
+                  style={{ display: newModalOpen ? "none" : "flex" }}
+                >
+                  <div className="Selected">
+                    <div className="SelectedInner">
+                      <div className="SelectedContent">
+                        {current === undefined
+                          ? `Vali Karakter`
+                          : `${current.first_name} ${current.last_name}`}
+                      </div>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "6px",
+                          backgroundColor: "white",
+                        }}
+                      />
+                      <div className="SelectedContent">
+                        <Button
+                          style={{
+                            backgroundColor:
+                              current !== undefined
+                                ? "hsl(144, 60%, 36%)"
+                                : "hsla(144, 60%, 36%, 0.541)",
+                            color: current !== undefined ? "white" : "#c0c0c0",
+                            borderRadius: "8px",
+                          }}
+                          fullWidth
+                          disabled={current === undefined}
+                          onClick={() => {
+                            selectCharacter(current.cid);
+                          }}
+                        >
+                          MÄNGI
+                        </Button>
+                      </div>
+                    </div>
                   </div>
+                  {/* <div style={{ padding: "1rem" }}>
+                    Liitu meie discordiga @ https://discord.io/eternalinvite :)
+                  </div> */}
                 </div>
+                <div className="Middle"></div>
+                {/*
                 <div className="Characters">
                   {characters.length > 0 &&
                     characters.map((character) => {
@@ -274,7 +334,11 @@ function App() {
                     </div>
                   )}
                 </div>
-                <div className="Bottom">
+                */}
+                <div
+                  className="Bottom"
+                  style={{ display: newModalOpen ? "none" : "flex" }}
+                >
                   <Button
                     style={{
                       backgroundColor: "hsl(144, 60%, 36%)",

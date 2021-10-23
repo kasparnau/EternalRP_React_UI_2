@@ -18,7 +18,9 @@ import Modal from 'react-modal'
 
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css' // ES6
-import moment from 'moment'
+
+import formatDistance from 'date-fns/formatDistance'
+import { et } from 'date-fns/locale'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -69,7 +71,7 @@ function MakeWantedModal(props) {
                     className={classes.root}
                 >
                     <InputLabel htmlFor="filled-adornment-amount">
-                        Reason
+                        Põhjus
                     </InputLabel>
                     <FilledInput
                         value={reason}
@@ -98,7 +100,7 @@ function MakeWantedModal(props) {
                     }}
                     onClick={closeModal}
                 >
-                    CANCEL
+                    TÜHISTA
                 </Button>
                 <Button
                     onClick={() => {
@@ -110,7 +112,7 @@ function MakeWantedModal(props) {
                         marginLeft: '5px',
                     }}
                 >
-                    MAKE WANTED
+                    TEE TAGAOTSITAVAKS
                 </Button>
             </div>
         </div>
@@ -258,10 +260,16 @@ function Page(props) {
                     character_id: currentProfile.character_id,
                     reason,
                 },
-                {}
+                true,
+                true
             )
-            .then(() => {
-                reloadPage()
+            .then((success) => {
+                if (success) {
+                    setCurrentProfile({
+                        ...currentProfile,
+                        warrant: { reason, last_update: Date.now() / 1000 },
+                    })
+                }
             })
     }
 
@@ -272,10 +280,16 @@ function Page(props) {
                 {
                     character_id: currentProfile.character_id,
                 },
-                []
+                true,
+                true
             )
-            .then(() => {
-                reloadPage()
+            .then((success) => {
+                if (success) {
+                    setCurrentProfile({
+                        ...currentProfile,
+                        warrant: false,
+                    })
+                }
             })
     }
 
@@ -307,10 +321,18 @@ function Page(props) {
                         description: editorState,
                         character_id: currentProfile.character_id,
                     },
-                    []
+                    true,
+                    true
                 )
-                .then(() => {
-                    reloadPage()
+                .then((success) => {
+                    if (success) {
+                        setCurrentProfile({
+                            ...currentProfile,
+                            profile_image_url: currentProfileImageURL,
+                            description: editorState,
+                            character_id: currentProfile.character_id,
+                        })
+                    }
                 })
         }
     }
@@ -333,7 +355,7 @@ function Page(props) {
         setTimeout(() => {
             if (
                 searchBarDebounceId.current === lastId &&
-                searchBarValue.length >= 3
+                searchBarValue.length >= 1
             ) {
                 props
                     .doNuiAction(
@@ -552,8 +574,7 @@ function Page(props) {
                                     >
                                         <FormControl fullWidth>
                                             <InputLabel htmlFor="standard-adornment-amount">
-                                                Profiilipildi URL (näiteks
-                                                mugshot)
+                                                Profiilipildi URL
                                             </InputLabel>
                                             <Input
                                                 style={{ color: 'white' }}
@@ -614,10 +635,18 @@ function Page(props) {
                                         </div>
                                         <Divider />
                                         <div>
-                                            {moment(
-                                                currentProfile.warrant
-                                                    .last_update * 1000
-                                            ).fromNow()}
+                                            {formatDistance(
+                                                new Date(
+                                                    currentProfile.warrant
+                                                        .last_update * 1000
+                                                ),
+                                                new Date(),
+                                                {
+                                                    includeSeconds: true,
+                                                    locale: et,
+                                                }
+                                            )}{' '}
+                                            tagasi
                                         </div>
                                     </div>
                                 </DataSection>
