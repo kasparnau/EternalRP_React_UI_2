@@ -117,7 +117,9 @@ function NewCharacterModal(props) {
           variant="filled"
           className={classes.root}
         >
-          <InputLabel htmlFor="filled-adornment-amount">Sugunimi</InputLabel>
+          <InputLabel htmlFor="filled-adornment-amount">
+            Perekonnanimi
+          </InputLabel>
           <FilledInput
             id="filled-adornment-amount"
             value={values.last_name}

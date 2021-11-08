@@ -25,7 +25,7 @@ function SlotText(props) {
 }
 
 function App() {
-  const [visible, updateVisible] = React.useState(!IS_PROD);
+  const [visible, updateVisible] = React.useState(true);
   const [characters, setCharacters] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -156,7 +156,7 @@ function App() {
       return "Vali eesnimi!";
     }
     if (!c2) {
-      return "Vali sugunimi!";
+      return "Vali perekonnanimi!";
     }
     if (!c4) {
       return "Vali sünnipäev. (Peab olema vanem kui 2000)";
